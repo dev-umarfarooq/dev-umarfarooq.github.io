@@ -8,3 +8,4 @@ export { BackLink } from './back-link';
 export { ScrollFade } from './scroll-fade';
 export { ProjectImage } from './project-image';
 export { GitHubIcon, LinkedInIcon, TwitterIcon, WhatsAppIcon } from './icons';
+export {PageTransition} from "./page-transition"

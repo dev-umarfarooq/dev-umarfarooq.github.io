@@ -53,7 +53,7 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
         </button>
       </div>
 
-      {/* ── Links — numbered, large, staggered entrance ── */}
+      {/* ── Links ── */}
       <nav className="flex flex-1 flex-col justify-center overflow-y-auto px-8 sm:px-12">
         {mainNav.map(({ label, href }, i) => {
           const isActive =
@@ -62,7 +62,14 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
             <Link
               key={href}
               href={href}
-              onClick={onClose}
+              onClick={() => {
+                // Only close immediately when tapping the already-active page
+                // (pathname won't change, so the header effect won't fire).
+                if (isActive) onClose();
+                // For new-page navigation: do nothing here.
+                // SiteHeader will close the nav after the route change,
+                // keeping the overlay as a transition curtain.
+              }}
               className={cn(
                 'group flex items-baseline gap-5 border-b border-border/20 py-5',
                 'transition-all duration-500 ease-out',
@@ -92,7 +99,7 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
         })}
       </nav>
 
-      {/* ── Bottom bar — socials + actions, staggered in ── */}
+      {/* ── Bottom bar ── */}
       <div
         className={cn(
           'border-t border-border/20 px-6 py-5',
@@ -140,23 +147,18 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
   );
 }
 
+
 // 'use client';
 
+// import { useEffect, useState } from 'react';
 // import Link from 'next/link';
 // import { usePathname } from 'next/navigation';
-// import { Download } from 'lucide-react';
+// import { useTheme } from 'next-themes';
+// import { X, Sun, Moon, Download } from 'lucide-react';
 // import { cn } from '@/lib/utils';
 // import { siteConfig } from '@/content/site';
 // import { mainNav } from '@/content/navigation';
 // import { SocialLinks } from '@/components/common';
-// import { Button } from '@/components/ui/button';
-// import { Separator } from '@/components/ui/separator';
-// import {
-//   Sheet,
-//   SheetContent,
-//   SheetHeader,
-//   SheetTitle,
-// } from '@/components/ui/sheet';
 
 // interface MobileNavProps {
 //   open: boolean;
@@ -165,49 +167,125 @@ export function MobileNav({ open, onClose }: MobileNavProps) {
 
 // export function MobileNav({ open, onClose }: MobileNavProps) {
 //   const pathname = usePathname();
+//   const { resolvedTheme, setTheme } = useTheme();
+//   const [mounted, setMounted] = useState(false);
+
+//   useEffect(() => setMounted(true), []);
+
+//   // Lock body scroll when open
+//   useEffect(() => {
+//     document.body.style.overflow = open ? 'hidden' : '';
+//     return () => {
+//       document.body.style.overflow = '';
+//     };
+//   }, [open]);
 
 //   return (
-//     <Sheet open={open} onOpenChange={onClose}>
-//       <SheetContent side="right" className="w-72">
-//         <SheetHeader>
-//           <SheetTitle className="text-left text-lg font-bold tracking-tight">
-//             {siteConfig.name}
-//           </SheetTitle>
-//         </SheetHeader>
+//     <div
+//       className={cn(
+//         'fixed inset-0 z-[100] flex flex-col bg-background',
+//         'transition-opacity duration-500 ease-in-out',
+//         open ? 'opacity-100' : 'pointer-events-none opacity-0'
+//       )}
+//       aria-hidden={!open}
+//     >
+//       {/* ── Top bar ── */}
+//       <div className="flex items-center justify-between px-6 pt-5 pb-2">
+//         <span className="font-mono text-[11px] tracking-[0.2em] text-muted-foreground/60 uppercase select-none">
+//           Navigation
+//         </span>
+//         <button
+//           onClick={onClose}
+//           className="flex h-10 w-10 items-center justify-center rounded-md text-muted-foreground transition-colors hover:text-foreground"
+//           aria-label="Close menu"
+//         >
+//           <X className="h-4 w-4" />
+//         </button>
+//       </div>
 
-//         <nav className="mt-8 flex flex-col gap-1">
-//           {mainNav.map(({ label, href }) => (
+//       {/* ── Links — numbered, large, staggered entrance ── */}
+//       <nav className="flex flex-1 flex-col justify-center overflow-y-auto px-8 sm:px-12">
+//         {mainNav.map(({ label, href }, i) => {
+//           const isActive =
+//             pathname === href || pathname.startsWith(href + '/');
+//           return (
 //             <Link
 //               key={href}
 //               href={href}
 //               onClick={onClose}
 //               className={cn(
-//                 'rounded-md px-3 py-2.5 text-sm transition-colors',
-//                 pathname === href || pathname.startsWith(href + '/')
-//                   ? 'bg-muted text-foreground'
-//                   : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+//                 'group flex items-baseline gap-5 border-b border-border/20 py-5',
+//                 'transition-all duration-500 ease-out',
+//                 open
+//                   ? 'translate-y-0 opacity-100'
+//                   : 'translate-y-6 opacity-0'
 //               )}
+//               style={{
+//                 transitionDelay: open ? `${100 + i * 70}ms` : '0ms',
+//               }}
 //             >
-//               {label}
+//               <span className="font-mono text-[11px] tabular-nums text-muted-foreground/20 transition-colors group-hover:text-muted-foreground/50">
+//                 {String(i + 1).padStart(2, '0')}
+//               </span>
+//               <span
+//                 className={cn(
+//                   'text-3xl font-bold leading-tight tracking-tight transition-colors sm:text-4xl',
+//                   isActive
+//                     ? 'text-foreground'
+//                     : 'text-muted-foreground/60 group-hover:text-foreground'
+//                 )}
+//               >
+//                 {label}
+//               </span>
 //             </Link>
-//           ))}
-//         </nav>
+//           );
+//         })}
+//       </nav>
 
-//         {siteConfig.cv.show && (
-//           <>
-//             <Separator className="my-6" />
-//             <Button variant="outline" size="sm" asChild className="w-full">
-//               <a href={siteConfig.cv.url} download>
-//                 <Download className="mr-2 h-3.5 w-3.5" />
-//                 {siteConfig.cv.label}
-//               </a>
-//             </Button>
-//           </>
+//       {/* ── Bottom bar — socials + actions, staggered in ── */}
+//       <div
+//         className={cn(
+//           'border-t border-border/20 px-6 py-5',
+//           'transition-all duration-500 ease-out',
+//           open ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
 //         )}
-
-//         <Separator className="my-6" />
-//         <SocialLinks />
-//       </SheetContent>
-//     </Sheet>
+//         style={{
+//           transitionDelay: open
+//             ? `${100 + mainNav.length * 70 + 50}ms`
+//             : '0ms',
+//         }}
+//       >
+//         <div className="flex items-center justify-between">
+//           <SocialLinks />
+//           <div className="flex items-center gap-1">
+//             {siteConfig.cv.show && (
+//               <a
+//                 href={siteConfig.cv.url}
+//                 download
+//                 className="flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground/50 transition-colors hover:text-foreground"
+//                 aria-label={siteConfig.cv.label}
+//               >
+//                 <Download className="h-4 w-4" />
+//               </a>
+//             )}
+//             {mounted && (
+//               <button
+//                 onClick={() =>
+//                   setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
+//                 }
+//                 className="flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground/50 transition-colors hover:text-foreground"
+//                 aria-label="Toggle theme"
+//               >
+//                 {resolvedTheme === 'dark' ? (
+//                   <Sun className="h-4 w-4" />
+//                 ) : (
+//                   <Moon className="h-4 w-4" />
+//                 )}
+//               </button>
+//             )}
+//           </div>
+//         </div>
+//       </div>
+//     </div>
 //   );
 // }
