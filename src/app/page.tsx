@@ -11,7 +11,6 @@ import {
 export default function HomePage() {
   return (
     <>
-  
       <Hero />
       <AboutPreview />
       <FeaturedProject />
