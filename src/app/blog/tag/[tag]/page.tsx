@@ -1,3 +1,5 @@
+// src/app/blog/tag/[tag]/page.tsx
+
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { createMetadata } from '@/lib/metadata';
