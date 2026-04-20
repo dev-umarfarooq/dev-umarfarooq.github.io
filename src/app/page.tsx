@@ -11,11 +11,11 @@ import {
 export default function HomePage() {
   return (
     <>
-      {/* <Hero />
+      <Hero />
       <AboutPreview />
       <FeaturedProject />
       <ProjectsPreview />
-      <Approach /> */}
+      <Approach />
       <BlogPreview />
       <ContactCta />
     </>
