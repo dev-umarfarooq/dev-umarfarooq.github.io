@@ -21,7 +21,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           fontMono.variable
         )}
       >
-        <ThemeProvider>
+            <h1>I am umar farooq</h1>
+    <h1>Contact: +923079877203</h1>
+    <h1>email: umarfarooq567800@gmail.com</h1>
+        {/* <ThemeProvider>
           <div className="relative flex min-h-screen flex-col">
             <SiteHeader />
             <main className="flex-1">
@@ -29,7 +32,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             </main>
             <SiteFooter />
           </div>
-        </ThemeProvider>
+        </ThemeProvider> */}
       </body>
     </html>
   );
